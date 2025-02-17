@@ -12,15 +12,15 @@ export interface LoginResponse {
 }
 
 export interface ReLoginRequest {
-    username: string;
-    password: string;
+    username?: string;
+    accessToken: string;
 }
 
 // 定义的接口
-export const userLogin = async (data?: LoginRequest) => {
+export const userLoginApi = async (data?: LoginRequest) => {
     return post<LoginResponse>({}, "/login", data);
 }
 
-export const refreshUserInfo = async (params?: ReLoginRequest) => {
+export const refreshUserInfoApi = async (params?: ReLoginRequest) => {
     return get<LoginResponse>({}, "/getUserInfo", params);
 }
