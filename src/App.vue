@@ -1,11 +1,6 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <router-view />
+  <!-- 一般vue项目都会使用vue-router -->
+  <!-- 所以我们这里直接写一个 router-view -->
+  <router-view></router-view>
 </template>
-
-<style scoped lang="less">
-
-</style>
+<script setup></script>

@@ -1,15 +1,8 @@
-<script setup lang="ts">
-import {useUserStore} from "@/store/user";
-
-const userStore = useUserStore();
-
-userStore.storeRefreshUserInfo();
-</script>
-
 <template>
-<div>login</div>
+  <div>login</div>
 </template>
-
-<style scoped lang="less">
-
-</style>
+<script lang="ts" setup>
+import { useUserStore } from "@/store/user";
+const userStore = useUserStore();
+console.log(userStore);
+</script>

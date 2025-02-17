@@ -1,48 +1,51 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 import pinia from "@/store";
-import {LoginRequest, refreshUserInfoApi, userLoginApi} from "@/api/user";
-import {IUserState} from "@/store/user/types";
+import { userLogin, refreshUserInfo } from "@/api/user";
 
-export const useUserStoreHook = defineStore(
-    "user",
-    {
-        state: ():IUserState => ({
-            username: "张三",
-            accessToken: "",
-            refreshToken: "",
-            roles: ["common"],
-        }),
-        getters: {},
-        actions: {
-            storeUserLogin(data: LoginRequest) {
-                return userLoginApi(data).then((res) => {
-                    this.username = res.username;
-                    this.roles = res.roles;
-                    this.accessToken = res.accessToken;
-                    return res;
-                })
-            },
-            storeRefreshUserInfo() {
-                return refreshUserInfoApi({
-                    accessToken: this.accessToken,
-                }).then((res) => {
-                    this.username = res.username;
-                    this.roles = res.roles;
-                    this.accessToken = res.accessToken;
-                    return res;
-                }).catch(() => {
-                    this.accessToken = "";
-                })
-            }
-        },
-        persist: [{
-            key: 'userInfo',
-            storage: sessionStorage,
-            pick: ['accessToken'],
-        }]
-    }
-);
-
+export interface UserState {
+  username: string;
+  accessToken: string;
+  refreshToken?: string;
+  roles: Array<string>;
+}
+export const useUserStoreHook = defineStore("userInfo", {
+  state: (): UserState => ({
+    username: "大伟",
+    accessToken: "",
+    roles: ["common"],
+  }),
+  getters: {},
+  actions: {
+    storeUserLogin(data) {
+      return userLogin(data).then((res) => {
+        this.username = res.username;
+        this.roles = res.roles;
+        this.accessToken = res.accessToken;
+        return res;
+      });
+    },
+    stroeRefreshUserInfo() {
+      if (this.username == "大伟" && this.accessToken != "") {
+        refreshUserInfo({
+          accessToken: this.accessToken,
+        })
+          .then((res) => {
+            this.username = res.username;
+            this.roles = res.roles;
+            this.accessToken = res.accessToken;
+          })
+          .catch(() => {
+            this.accessToken = "";
+          });
+      }
+    },
+  },
+  persist: {
+    key: "userInfo",
+    storage: sessionStorage,
+    paths: ["accessToken"],
+  },
+});
 export function useUserStore() {
-    return useUserStoreHook(pinia);
+  return useUserStoreHook(pinia);
 }
